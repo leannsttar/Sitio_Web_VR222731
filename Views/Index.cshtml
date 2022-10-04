@@ -1,0 +1,85 @@
+﻿
+@model Sitio_Web_VR222731.Models.Datos
+@{
+    ViewBag.Title = "Universidad Don Bosco 😋😎🤗";
+}
+@using (Html.BeginForm("Nuevo", "Home", FormMethod.Post))
+{<button type="submit" id="btnNuevo" class="btn btn-lg btn-primary top-right " onclick="location.href('@Url.Action("Nuevo", "Home")')">
+        Nueva Oferta
+    </button>
+}
+
+<nav class="navbar" role="navigation">
+    <h1 class="text-center">Bolsa de Trabajo en Línea</h1>
+    <h5 class="text-center">Universidad Don Bosco - El Salvador</h5>
+    <hr style="height:10px" />
+</nav>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div class="form-inline" role="form">
+        <div class="form-group col-lg-3">
+            Categoria:
+        </div>
+        <div class="form-group col-lg-3">
+            Localidad:
+        </div>
+        <div class="form-group col-lg-6">
+            Empresa:
+        </div>
+    </div>
+
+    <div class="form-inline" role="form">
+        <div class="form-group col-lg-3">
+            @Html.DropDownList("OpcionesCat", null, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-lg-3">
+            @Html.DropDownList("OpcionesLoc", null, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-lg-3">
+            @Html.DropDownList("OpcionesEmp", null, new { @class = "form-control" })
+        </div>
+        <button type="submit" id="btnBuscar" class="btn btn-lg btn-primary " onclick="location.href('@Url.Action("Index", "Home")')">
+            BUSCAR
+        </button>
+    </div>
+}
+
+<br />
+<br />
+<form id="exportWebGrid" action="Meeting/ExportHeade" method="post">
+
+    <div name="webView">
+        @{
+            var objweb = new WebGrid(ViewBag.Ofertas, rowsPerPage: 5, canPage: true);
+        }
+        @objweb.GetHtml(
+            tableStyle: "table table-responsive table-hover",
+            fillEmptyRows: true,
+            headerStyle: "thead-dark",
+            footerStyle: "pie-grid",
+            mode: WebGridPagerModes.All,
+            firstText: "<< Primera",
+            previousText: "< Anterior",
+            nextText: "Siguiente >",
+            lastText: "Última >>",
+            columns:
+            objweb.Columns(
+
+            objweb.Column(columnName: "sNombreCategoria", header: "Nombre Categoria"),
+            objweb.Column(columnName: "sTituloOferta", header: "Titulo Oferta"),
+            objweb.Column(columnName: "nTipoContrato", header: "Titulo Contrato"),
+            objweb.Column(columnName: "nTipoJornada", header: "Titulo Jornada"),
+            objweb.Column(columnName: "fSalario", header: "Salario"),
+            objweb.Column(columnName: "dFechaPublicacion", header: "Fecha Publicación"),
+            objweb.Column(columnName: "sNombreEmpresa", header: "Nombre Empresa"),
+            objweb.Column(columnName: "sNombreMunicipio", header: "Nombre Municipio"),
+            objweb.Column(format:
+            @<text>@Html.ActionLink("Editar", "Editar", "Home", new { nIdOferta = item.nIdOferta }, null)|
+            @Html.ActionLink("Eliminar", "Eliminar", "Home", new { nIdOferta = item.nIdOferta }, null)</text>))
+        )
+    </div>
+
+</form>
+
+    <h2>Index</h2>
